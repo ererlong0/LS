@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我爱你</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10px;
+    color: #fff;
+    font-size: 1em;
+    opacity: 0.8;
+    user-select: none;
+    pointer-events: none;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.3;
+    }
+}
+
+.love-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 80px;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    letter-spacing: 20px;
+    white-space: nowrap;
+    opacity: 0;
+    animation: showLove 4s ease-in-out 2s forwards;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.3);
+}
+
+@keyframes showLove {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+        filter: blur(10px);
+    }
+    50% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.05);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        filter: blur(0);
+    }
+}
+
+.glow {
+    animation: glowPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.3);
+    }
+    100% {
+        text-shadow: 0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(255,255,255,0.5), 0 0 90px rgba(255,255,255,0.2);
+    }
+}
+
+#audioHint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #666;
+    font-size: 14px;
+    opacity: 0;
+    animation: fadeHint 2s ease 6s forwards;
+}
+
+@keyframes fadeHint {
+    to { opacity: 0.5; }
+}
+</style>
+</head>
+<body>
+
+<div class="love-text glow">我爱你</div>
+<div id="audioHint">点击页面播放音乐</div>
+
+<audio id="bgm" loop>
+    <source src="http://music.163.com/song/media/outer/url?id=1293886117.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function goFullScreen() {
+    const doc = document.documentElement;
+    if (doc.requestFullscreen) {
+        doc.requestFullscreen().catch(function(){});
+    } else if (doc.webkitRequestFullscreen) {
+        doc.webkitRequestFullscreen();
+    } else if (doc.msRequestFullscreen) {
+        doc.msRequestFullscreen();
+    }
+}
+
+goFullScreen();
+
+document.addEventListener('click', function() {
+    goFullScreen();
+    var audio = document.getElementById('bgm');
+    if (audio.paused) {
+        audio.play().catch(function(){});
+    }
+});
+
+function createSnowflake() {
+    var flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.innerHTML = '&#10052;';
+    flake.style.left = Math.random() * 100 + 'vw';
+    var size = Math.random() * 15 + 10;
+    flake.style.fontSize = size + 'px';
+    flake.style.animationDuration = (Math.random() * 5 + 5) + 's';
+    flake.style.animationDelay = Math.random() * 5 + 's';
+    flake.style.opacity = Math.random() * 0.6 + 0.4;
+    document.body.appendChild(flake);
+    setTimeout(function() {
+        flake.remove();
+    }, 12000);
+}
+
+setInterval(createSnowflake, 200);
+
+for (var i = 0; i < 30; i++) {
+    setTimeout(createSnowflake, i * 100);
+}
+
+window.addEventListener('load', function() {
+    var audio = document.getElementById('bgm');
+    audio.play().catch(function(){});
+});
+</script>
+
+</body>
+</html>
