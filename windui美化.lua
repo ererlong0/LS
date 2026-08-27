@@ -525,7 +525,9 @@ DialogContent="Text",
 DialogIcon="Icon",
 
 Toggle="Button",
+ToggleTransparency=0.7,
 ToggleBar="White",
+ButtonTransparency=0.7,
 
 Checkbox="Primary",
 CheckboxIcon="White",
