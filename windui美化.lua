@@ -1,4 +1,557 @@
-onIcon="Icon",
+
+type ConfigType__DARKLUA_TYPE_a={
+Object:Instance,
+Camera:Instance?,
+Interactive:boolean?,
+Height:number?,
+Focused:boolean,
+
+Window:any,
+WindUI:any,
+Tab:any,
+Parent:Instance,
+}local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()
+
+local b
+
+local d={
+New=nil,
+Init=nil,
+Shapes={
+Circle={
+Image="rbxassetid://111665032676235",
+Rect=Rect.new(512,512,512,512),
+Radius=512,
+},
+CircleOutline={
+Image="rbxassetid://108556680453287",
+Rect=Rect.new(512,512,512,512),
+Radius=512,
+},
+CircleGlass={
+Image="rbxassetid://95600044758841",
+Rect=Rect.new(512,512,512,512),
+Radius=512,
+},
+
+
+
+SquircleH={
+Image="rbxassetid://125083578015333",
+Rect=Rect.new(512,325,512,325),
+Radius=325,
+},
+SquircleHOutline={
+Image="rbxassetid://107043713170567",
+Rect=Rect.new(512,325,512,325),
+Radius=325,
+},
+SquircleHGlass={
+Image="rbxassetid://84819521201001",
+Rect=Rect.new(512,325,512,325),
+Radius=325,
+},
+["SquircleH-TL-TR"]={
+Image="rbxassetid://90680657206619",
+Rect=Rect.new(807,512,807,512),
+Radius=325,
+AutoChange=false,
+},
+["SquircleH-BL-BR"]={
+Image="rbxassetid://99216342056719",
+Rect=Rect.new(0,512,0,512),
+Radius=325,
+AutoChange=false,
+},
+
+SquircleV={
+Image="rbxassetid://124965260437653",
+Rect=Rect.new(325,512,325,512),
+Radius=325,
+},
+SquircleVOutline={
+Image="rbxassetid://88808835404198",
+Rect=Rect.new(325,512,325,512),
+Radius=325,
+},
+SquircleVGlass={
+Image="rbxassetid://124982801466667",
+Rect=Rect.new(325,512,325,512),
+Radius=325,
+},
+
+Squircle={
+Image="rbxassetid://89641024074289",
+Rect=Rect.new(460,460,460,460),
+Radius=310,
+},
+SquircleOutline={
+Image="rbxassetid://74029063732681",
+Rect=Rect.new(512,512,512,512),
+Radius=310,
+},
+SquircleGlass={
+Image="rbxassetid://131126436897551",
+Rect=Rect.new(512,512,512,512),
+Radius=310,
+},
+
+["Squircle-TL-TR"]={
+Image="rbxassetid://75712142040725",
+Rect=Rect.new(512,512,512,512),
+Radius=310,
+AutoChange=false,
+},
+["Squircle-BL-BR"]={
+Image="rbxassetid://83676684425544",
+Rect=Rect.new(512,0,512,0),
+Radius=310,
+AutoChange=false,
+},Square=
+{
+Image="rbxassetid://82909646051652",
+Rect=Rect.new(512,512,512,512),
+Radius=512,
+AutoChange=false,
+},
+},
+}
+
+function d.Init(e,f)
+b=f
+return e.New
+end
+
+function d.New(e,f,g,h,i,j,l)
+local m={
+Radius=f or 0,
+Type=g or"Circle",
+GetRadius=nil,
+GetType=nil,
+SetRadius=nil,
+SetType=nil,
+}
+
+local p={
+["Glass-0.7"]="SquircleGlass",
+["Glass-1"]="SquircleGlass",
+["Glass-1.4"]="SquircleGlass",
+["Squircle-Outline"]="SquircleOutline",
+}
+
+local function GetShape(r)
+return d.Shapes[p[r]or r]or d.Shapes.Circle
+end
+
+local r=b.New(j and"ImageButton"or"ImageLabel",{
+Image="",
+ScaleType=l~=false and"Slice"or nil,
+SliceCenter=m.Type~="Squircle"and Rect.new(512,512,512,512)or nil,
+SliceScale=1,
+ThemeTag=h and h.ThemeTag or nil,
+BackgroundTransparency=1,
+},i)
+
+for u,v in next,h do
+if not table.find({"ThemeTag"},u)then
+r[u]=v
+end
+end
+
+function m.SetRadius(u,v)
+m.Radius=v
+r.SliceScale=math.max(v/GetShape(m.Type).Radius,0.0001)
+return m
+end
+
+function m.SetType(u,v)
+m.Type=v
+local x=GetShape(v)
+r.Image=x.Image
+r.SliceCenter=x.Rect
+m:SetRadius(m.Radius)
+return m
+end
+
+function m.GetRadius(u)
+return m.Radius
+end
+
+function m.GetType(u)
+return m.Type
+end
+
+m:SetRadius(f)
+m:SetType(g)
+
+b.AddSignal(r:GetPropertyChangedSignal"AbsoluteSize",function()
+local u=GetShape(m.Type)
+if u.AutoChange==false then
+return
+end
+
+if string.find(m.Type,"Squircle")then
+local v=string.find(m.Type,"Glass")and"Glass"or nil
+local x=string.find(m.Type,"Outline")and"Outline"or nil
+
+local z=math.round(r.AbsoluteSize.X/b.UIScale)
+local A=math.round(r.AbsoluteSize.Y/b.UIScale)
+
+local B=m.Radius~=0 and m.Radius or math.min(z,A)/2
+local C=d.Shapes.Squircle.Radius/1024
+local F=B/math.min(z,A)
+
+local G
+
+if z>A then
+if F>=C then
+G="SquircleH"..(x or v or"")
+else
+G="Squircle"..(x or v or"")
+end
+elseif z<A then
+if F>=C then
+G="SquircleV"..(x or v or"")
+else
+G="Squircle"..(x or v or"")
+end
+else
+if F>=C then
+G="Circle"..(x or v or"")
+else
+G="Squircle"..(x or v or"")
+end
+end
+
+if G~=m:GetType()then
+m:SetType(G)
+end
+end
+end)
+
+return r,m
+end
+
+return d end function a.b()
+
+local b=(cloneref or clonereference or function(b)return b end)
+
+local d=b(game:GetService"ReplicatedStorage":WaitForChild("GetIcons",99999):InvokeServer())
+
+local function parseIconString(e)
+if type(e)=="string"then
+local f=e:find":"
+if f then
+local g=e:sub(1,f-1)
+local h=e:sub(f+1)
+return g,h
+end
+end
+return nil,e
+end
+
+function d.AddIcons(e,f)
+if type(e)~="string"or type(f)~="table"then
+error"AddIcons: packName must be string, iconsData must be table"
+return
+end
+
+if not d.Icons[e]then
+d.Icons[e]={
+Icons={},
+Spritesheets={}
+}
+end
+
+for g,h in pairs(f)do
+if type(h)=="number"or(type(h)=="string"and h:match"^rbxassetid://")then
+local i=h
+if type(h)=="number"then
+i="rbxassetid://"..tostring(h)
+end
+
+d.Icons[e].Icons[g]={
+Image=i,
+ImageRectSize=Vector2.new(0,0),
+ImageRectPosition=Vector2.new(0,0),
+Parts=nil
+}
+d.Icons[e].Spritesheets[i]=i
+
+elseif type(h)=="table"then
+if h.Image and h.ImageRectSize and h.ImageRectPosition then
+local i=h.Image
+if type(i)=="number"then
+i="rbxassetid://"..tostring(i)
+end
+
+d.Icons[e].Icons[g]={
+Image=i,
+ImageRectSize=h.ImageRectSize,
+ImageRectPosition=h.ImageRectPosition,
+Parts=h.Parts
+}
+
+if not d.Icons[e].Spritesheets[i]then
+d.Icons[e].Spritesheets[i]=i
+end
+else
+warn("AddIcons: Invalid spritesheet data format for icon '"..g.."'")
+end
+else
+warn("AddIcons: Unsupported data type for icon '"..g.."': "..type(h))
+end
+end
+end
+
+function d.SetIconsType(e)
+d.IconsType=e
+end
+
+local e
+function d.Init(f,g)
+d.New=f
+d.IconThemeTag=g
+
+e=f
+return d
+end
+
+function d.Icon(f,g,h)
+h=h~=false
+local i,j=parseIconString(f)
+
+local l=i or g or d.IconsType
+local m=j
+
+local p=d.Icons[l]
+
+if p and p.Icons and p.Icons[m]then
+return{
+p.Spritesheets[tostring(p.Icons[m].Image)],
+p.Icons[m],
+}
+elseif p and p[m]and string.find(p[m],"rbxassetid://")then
+return h and{
+p[m],
+{ImageRectSize=Vector2.new(0,0),ImageRectPosition=Vector2.new(0,0)}
+}or p[m]
+end
+return nil
+end
+
+function d.GetIcon(f,g)
+return d.Icon(f,g,false)
+end
+
+
+function d.Icon2(f,g,h)
+return d.Icon(f,g,true)
+end
+
+function d.Image(f)
+local g={
+Icon=f.Icon or nil,
+Type=f.Type,
+Colors=f.Colors or{(d.IconThemeTag or Color3.new(1,1,1)),Color3.new(1,1,1)},
+Transparency=f.Transparency or{0,0},
+Size=f.Size or UDim2.new(0,24,0,24),
+
+IconFrame=nil,
+}
+
+local h={}
+local i={}
+
+for j,l in next,g.Colors do
+h[j]={
+ThemeTag=typeof(l)=="string"and l,
+Color=typeof(l)=="Color3"and l,
+}
+end
+
+for j,l in next,g.Transparency do
+i[j]={
+ThemeTag=typeof(l)=="string"and l,
+Value=typeof(l)=="number"and l,
+}
+end
+
+
+local j=d.Icon2(g.Icon,g.Type)
+local l=typeof(j)=="string"and string.find(j,'rbxassetid://')
+
+if d.New then
+local m=e or d.New
+
+
+
+local p=m("ImageLabel",{
+Size=g.Size,
+BackgroundTransparency=1,
+ImageColor3=h[1].Color or nil,
+ImageTransparency=i[1].Value or nil,
+ThemeTag=h[1].ThemeTag and{
+ImageColor3=h[1].ThemeTag,
+ImageTransparency=i[1].ThemeTag,
+},
+Image=l and j or j[1],
+ImageRectSize=l and nil or j[2].ImageRectSize,
+ImageRectOffset=l and nil or j[2].ImageRectPosition,
+})
+
+
+if not l and j[2].Parts then
+for r,u in next,j[2].Parts do
+local v=d.Icon(u,g.Type)
+
+m("ImageLabel",{
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+ImageColor3=h[1+r].Color or nil,
+ImageTransparency=i[1+r].Value or nil,
+ThemeTag=h[1+r].ThemeTag and{
+ImageColor3=h[1+r].ThemeTag,
+ImageTransparency=i[1+r].ThemeTag,
+},
+Image=v[1],
+ImageRectSize=v[2].ImageRectSize,
+ImageRectOffset=v[2].ImageRectPosition,
+Parent=p,
+})
+end
+end
+
+g.IconFrame=p
+else
+local m=Instance.new"ImageLabel"
+m.Size=g.Size
+m.BackgroundTransparency=1
+m.ImageColor3=h[1].Color
+m.ImageTransparency=i[1].Value or nil
+m.Image=l and j or j[1]
+m.ImageRectSize=l and nil or j[2].ImageRectSize
+m.ImageRectOffset=l and nil or j[2].ImageRectPosition
+
+
+if not l and j[2].Parts then
+for p,r in next,j[2].Parts do
+local u=d.Icon(r,g.Type)
+
+local v=Instance.New"ImageLabel"
+v.Size=UDim2.new(1,0,1,0)
+v.BackgroundTransparency=1
+v.ImageColor3=h[1+p].Color
+v.ImageTransparency=i[1+p].Value or nil
+v.Image=u[1]
+v.ImageRectSize=u[2].ImageRectSize
+v.ImageRectOffset=u[2].ImageRectPosition
+v.Parent=m
+end
+end
+
+g.IconFrame=m
+end
+
+
+return g
+end
+
+return d end function a.c()
+return function(b)
+return{
+
+
+Primary="Icon",
+
+White=Color3.new(1,1,1),
+Black=Color3.new(0,0,0),
+
+Dialog="Accent",
+
+Background="Accent",
+BackgroundTransparency=0,
+Hover="Text",
+
+PanelBackground="White",
+PanelBackgroundTransparency=0.95,
+
+WindowBackground="Background",
+
+WindowShadow="Black",
+
+
+WindowTopbarTitle="Text",
+WindowTopbarAuthor="Text",
+WindowTopbarIcon="Icon",
+WindowTopbarButtonIcon="Icon",
+
+
+WindowSearchBarBackground="Dialog",
+
+TabBackground="Hover",
+TabBackgroundHover="Hover",
+TabBackgroundHoverTransparency=0.97,
+TabBackgroundActive="Hover",
+TabBackgroundActiveTransparency=0.93,
+TabText="Text",
+TabTextTransparency=0.3,
+TabTextTransparencyActive=0,
+TabTitle="Text",
+TabIcon="Icon",
+TabIconTransparency=0.4,
+TabIconTransparencyActive=0.1,
+TabBorderTransparency=1,
+TabBorderTransparencyActive=0.75,
+TabBorder="White",
+
+ElementBackground="Text",
+ElementBackgroundTransparency=0.93,
+ElementBackgroundHover=b:AddColor("ElementBackground","#ffffff",0.1),
+ElementTitle="Text",
+ElementDesc="Text",
+ElementIcon="Icon",
+
+PopupBackground="Background",
+PopupBackgroundTransparency="BackgroundTransparency",
+PopupTitle="Text",
+PopupContent="Text",
+PopupIcon="Icon",
+
+DialogBackground="Dialog",
+DialogBackgroundTransparency="BackgroundTransparency",
+DialogTitle="Text",
+DialogContent="Text",
+DialogIcon="Icon",
+
+Toggle="Button",
+ToggleTransparency=1,
+ToggleBar="White",
+ButtonTransparency=1,
+
+Checkbox="Primary",
+CheckboxIcon="White",
+CheckboxBorder="White",
+CheckboxBorderTransparency=0.75,
+
+SliderIcon="Icon",
+
+Slider="Primary",
+SliderThumb="White",
+SliderIconFrom="SliderIcon",
+SliderIconTo="SliderIcon",
+
+ProgressBar="Primary",
+ProgressBarTrack="Text",
+ProgressBarTrackTransparency=0.9,
+ProgressBarText="Text",
+
+Tooltip=Color3.fromHex"4C4C4C",
+TooltipText="White",
+TooltipSecondary="Primary",
+TooltipSecondaryText="White",
+
+TabSectionIcon="Icon",
 
 SectionIcon="Icon",
 
